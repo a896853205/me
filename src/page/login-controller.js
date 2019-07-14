@@ -1,11 +1,9 @@
 import React from 'react';
-import { Button, WhiteSpace, WingBlank } from 'antd-mobile';
+import { Button } from 'antd';
 class LoginController extends React.Component {
   render() {
     return (
-    <WingBlank>
-      <Button type="primary">primary</Button><WhiteSpace />
-    </WingBlank>
+      <Button type="primary">primary</Button>
     );
   }
 }
