@@ -1,8 +1,12 @@
 import React from 'react';
+// 路由
+import { Route, Link } from "react-router-dom";
+import { BCG_ROOT_Name, EQUIP } from '../constants/route-constants';
 // 样式
 import '../style/home.css'
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
+
 
 class HomeController extends React.Component {
   render() {
@@ -23,9 +27,11 @@ class HomeController extends React.Component {
                   </span>
                 }
               >
-                <Menu.Item key="4">目前需求装备</Menu.Item>
-                <Menu.Item key="5">添加需求装备</Menu.Item>
-                <Menu.Item key="6">过气装备</Menu.Item>
+                {EQUIP.routes.map(item => 
+                  (<Menu.Item key={item.path}>
+                    <Link to={`/${BCG_ROOT_Name}/${item.path}`}>{item.name}</Link>
+                  </Menu.Item>)
+                )}
             </Menu.SubMenu>
             <Menu.Item key="2">
               <Icon type="smile" />
@@ -40,7 +46,9 @@ class HomeController extends React.Component {
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }} />
           <Content style={{ margin: '24px 16px 0' }}>
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>content</div>
+            {EQUIP.routes.map(item => 
+              (<Route path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
+            )}
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
         </Layout>
