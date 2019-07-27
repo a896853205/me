@@ -47,7 +47,7 @@ class HomeController extends React.Component {
           <Header style={{ background: '#fff', padding: 0 }} />
           <Content style={{ margin: '24px 16px 0' }}>
             {EQUIP.routes.map(item => 
-              (<Route path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
+              (<Route key={`${item.path}`} path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
             )}
           </Content>
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
