@@ -1,6 +1,6 @@
 import * as DominConfigs from '../constants/domin-constants';
 import moment from 'moment';
-
+import { message } from 'antd';
 export async function launchRequest(
   url,
   params = {},
@@ -76,7 +76,10 @@ export async function launchRequest(
     if (responseData.status &&
       responseData.status === DominConfigs.SERVICE_CODE.Successed) 
       return responseData.data;
-    else return { msg: responseData.msg, responseData };
+    else {
+      message.error(responseData.msg);
+      return null;
+    }
   }
 
 }

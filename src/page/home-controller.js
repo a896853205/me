@@ -45,7 +45,7 @@ class HomeController extends React.Component {
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }} />
-          <Content style={{ margin: '24px 16px 0' }}>
+          <Content style={{ margin: '24px 16px 0', background: '#fff', padding: 20 }}>
             {EQUIP.routes.map(item => 
               (<Route key={`${item.path}`} path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
             )}
