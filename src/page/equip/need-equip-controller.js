@@ -23,7 +23,7 @@ class NeedEquipController extends React.Component {
       },
       {
         title: '备注',
-        dataIndex: 'desc',
+        dataIndex: 'des',
       },
       // {
       //   title: '省略图',
@@ -40,9 +40,9 @@ class NeedEquipController extends React.Component {
   componentDidMount() {
     // 在这里调用api查询
     launchRequest(APIS.EQUIP_QUERY)
-      .then(data => {
-        this.setState({equipeList: data});
-      });
+    .then(data => {
+      this.setState({equipeList: data});
+    });
   }
 }
 export default NeedEquipController;

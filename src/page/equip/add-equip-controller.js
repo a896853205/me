@@ -1,4 +1,7 @@
 import React from 'react';
+// 请求文件
+import { launchRequest } from '../../util/request';
+import * as APIS from '../../constants/api-constants';
 // UI组件
 import {
   Form,
@@ -55,7 +58,7 @@ class AddEquipController extends React.Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="金币数">
-            {getFieldDecorator('phone', {
+            {getFieldDecorator('money', {
               rules: [{ 
                 required: true, 
                 message: '这东西不是免费的吧!' 
@@ -67,7 +70,7 @@ class AddEquipController extends React.Component {
             })(<Input />)}
           </Form.Item>
           <Form.Item label="备注">
-            {getFieldDecorator('desc')(<Input />)}
+            {getFieldDecorator('des')(<Input />)}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
@@ -78,5 +81,18 @@ class AddEquipController extends React.Component {
       </div>
     );
   }
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        // 在这里调用表单
+        launchRequest(APIS.EQUIP_INSERT, values)
+        .then(data => {
+          console.log(data);
+        });
+        console.log('Received values of form: ', values);
+      }
+    });
+  };
 }
 export default Form.create({ name: 'AddEquipController' })(AddEquipController);
