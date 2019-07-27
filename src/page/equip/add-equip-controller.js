@@ -1,7 +1,82 @@
 import React from 'react';
+// UI组件
+import {
+  Form,
+  Input,
+  Tooltip,
+  Icon,
+  Cascader,
+  Select,
+  Row,
+  Col,
+  Checkbox,
+  Button,
+  AutoComplete,
+} from 'antd';
+
 class AddEquipController extends React.Component {
   render() {
-    return (<div>增加装备订单</div>);
+    const { getFieldDecorator } = this.props.form;
+    // 表单布局
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+    };
+    // 表单其中的组件布局
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 4,
+        },
+      },
+    };
+    return (
+      <div>增加装备订单
+        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+          <Form.Item label="名称">
+            {getFieldDecorator('name', {
+              rules: [
+                {
+                  required: true,
+                  message: '你至少告诉我它叫啥呀!',
+                },
+              ],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="金币数">
+            {getFieldDecorator('phone', {
+              rules: [{ 
+                required: true, 
+                message: '这东西不是免费的吧!' 
+              }, {
+                type: 'number',
+                message: '你确定输入的是金币数?',
+                transform: value => parseFloat(value)
+              }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item label="备注">
+            {getFieldDecorator('desc')(<Input />)}
+          </Form.Item>
+          <Form.Item {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">
+              种草!
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    );
   }
 }
-export default AddEquipController;
+export default Form.create({ name: 'AddEquipController' })(AddEquipController);
