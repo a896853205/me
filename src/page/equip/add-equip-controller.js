@@ -6,18 +6,15 @@ import * as APIS from '../../constants/api-constants';
 import {
   Form,
   Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
+  Upload,
   Button,
-  AutoComplete,
+  Icon,
 } from 'antd';
 
 class AddEquipController extends React.Component {
+  state = {
+    imgLoading: false,
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     // 表单布局
@@ -72,6 +69,23 @@ class AddEquipController extends React.Component {
           <Form.Item label="备注">
             {getFieldDecorator('des')(<Input />)}
           </Form.Item>
+          <Form.Item label="图片">
+            {getFieldDecorator('pic')(
+              <Upload
+                name="avatar"
+                listType="picture"
+                className="avatar-uploader"
+                showUploadList={true}
+                // beforeUpload={this.beforeUpload}
+                // onChange={this.handleUploadChange}
+              >
+                <Button>
+                  <Icon type="upload" /> 传一些图片
+                </Button>
+              </Upload>
+            )}
+          </Form.Item>
+          
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               种草!

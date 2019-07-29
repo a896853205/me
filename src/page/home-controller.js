@@ -9,12 +9,28 @@ const { Header, Content, Footer, Sider } = Layout;
 
 
 class HomeController extends React.Component {
+  state = {
+    isCollapse: true
+  }
   render() {
     return (
       <Layout>
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
+          onCollapse={(collapsed, type) => {
+            let isCollapse = true;
+            if (type === 'clickTrigger') isCollapse = collapsed
+            this.setState({
+              isCollapse
+            });
+          }}
+          onBreakpoint={broken => {
+            if (!broken) 
+              this.setState({
+                isCollapse: true
+              });
+          }}
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline">
@@ -43,14 +59,17 @@ class HomeController extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
-          <Content style={{ margin: '24px 16px 0', background: '#fff', padding: 20 }}>
-            {EQUIP.routes.map(item => 
-              (<Route key={`${item.path}`} path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
-            )}
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+        <Layout className="main-right-container">
+          <div className={this.state.isCollapse ? '' : 'un-collapsed'}></div>
+          <div className='main-container'>
+            <Header style={{ background: '#fff', padding: 0 }} />
+            <Content style={{ margin: '24px 16px 0', background: '#fff', padding: 20 }}>
+              {EQUIP.routes.map(item => 
+                (<Route key={`${item.path}`} path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
+              )}
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          </div>
         </Layout>
       </Layout>
     );

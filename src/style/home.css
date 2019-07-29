@@ -3,3 +3,21 @@
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
 }
+.main-container {
+  position: relative;
+  z-index: 0;
+}
+.un-collapsed {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  transition: .2s;
+}
+.main-right-container {
+  position: relative;
+}
+.ant-layout-sider-zero-width-trigger {
+  z-index: 3;
+}
