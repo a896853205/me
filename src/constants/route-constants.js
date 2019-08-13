@@ -2,7 +2,6 @@ import AddEquipController from '../page/equip/add-equip-controller';
 import NeedEquipController from '../page/equip/need-equip-controller';
 import OldEquipController from '../page/equip/old-equip-controller';
 
-
 export const BCG_ROOT_Name = 'background';
 
 /**

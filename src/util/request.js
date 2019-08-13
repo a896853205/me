@@ -1,6 +1,9 @@
 import * as DominConfigs from '../constants/domin-constants';
+import * as APIs from '../constants/api-constants';
 import moment from 'moment';
 import { message } from 'antd';
+
+// 请求包装
 export async function launchRequest(
   url,
   params = {},
@@ -54,6 +57,66 @@ export async function launchRequest(
     fetchParams.body = JSON.stringify(params);
   }
 
+  // 进行请求
+  return await _fetch(url, params, requestType, fetchParams);
+}
+
+/**
+ * 上传项目作品照片到七牛
+ *
+ * result: {
+ *      url: 照片展示url
+ *      key: 上传用key
+ * }
+ *
+ * @param imagePath 照片路径
+ * @param success
+ * @param failed
+ * @returns {function(*)}
+ */
+export function uploadProjectImageToQiniu(
+  image,
+) {
+  return new Promise(async (resolve, reject) => {
+    const formdata = new FormData();
+    let fetchParams = {},
+        responseData = {}
+  
+    // 获取上传token
+    let tokenResponse = await launchRequest(
+      APIs.GetUploadToken
+    );
+  
+    // formdata.append('key', tokenResponse.result.key);
+    formdata.append('token', tokenResponse);
+    formdata.append('file', image);
+  
+    fetchParams = {
+      method: DominConfigs.REQUEST_TYPE.POST,
+      body: formdata,
+    };
+  
+    responseData = await _fetch(
+      APIs.UPLOAD_TO_QiNiu,
+      {},
+      DominConfigs.REQUEST_TYPE.POST,
+      fetchParams
+    );
+  
+    if (responseData) {
+      resolve(responseData);
+    } else {
+      reject();
+    }
+  })
+}
+
+async function _fetch (
+  url,
+  params = {},
+  requestType,
+  fetchParams = {},
+) {
   console.log(
     `-----------------\n发起${requestType}请求\n` +
     `* url: ${url}\n` +
@@ -67,7 +130,7 @@ export async function launchRequest(
   console.log('请求返回: status:' + responseData.succ + '\n');
   console.dir(responseData);
   console.log('-----------------');
-  
+
   if (
     responseData.succ ===
     DominConfigs.RESPONSE_CODE.success
@@ -75,11 +138,13 @@ export async function launchRequest(
     // 请求成功 succ: 200 && status: 1
     if (responseData.status &&
       responseData.status === DominConfigs.SERVICE_CODE.Successed) 
+      
       return responseData.data;
+
     else {
       message.error(responseData.msg);
+
       return null;
     }
   }
-
 }

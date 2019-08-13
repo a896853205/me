@@ -1,6 +1,6 @@
 import React from 'react';
 // 请求文件
-import { launchRequest } from '../../util/request';
+import { launchRequest, uploadProjectImageToQiniu } from '../../util/request';
 import * as APIS from '../../constants/api-constants';
 // UI组件
 import {
@@ -9,14 +9,17 @@ import {
   Upload,
   Button,
   Icon,
+  message
 } from 'antd';
 
 class AddEquipController extends React.Component {
   state = {
     imgLoading: false,
+    fileList: [],
   };
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { fileList } = this.state;
     // 表单布局
     const formItemLayout = {
       labelCol: {
@@ -70,22 +73,22 @@ class AddEquipController extends React.Component {
             {getFieldDecorator('des')(<Input />)}
           </Form.Item>
           <Form.Item label="图片">
-            {getFieldDecorator('pic')(
-              <Upload
-                name="avatar"
-                listType="picture"
-                className="avatar-uploader"
-                showUploadList={true}
-                // beforeUpload={this.beforeUpload}
-                // onChange={this.handleUploadChange}
-              >
-                <Button>
-                  <Icon type="upload" /> 传一些图片
-                </Button>
-              </Upload>
-            )}
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList = { true }
+              beforeUpload = { this.beforeUpload }
+              customRequest = { this.handleUploadcustomRequest }
+              fileList = { fileList }
+              onChange={this.handleImageChange}
+            >
+              <div>
+                <Icon type="plus" />
+                <div className="ant-upload-text">Upload</div>
+              </div>
+            </Upload>
           </Form.Item>
-          
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               种草!
@@ -95,8 +98,10 @@ class AddEquipController extends React.Component {
       </div>
     );
   }
+
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 在这里调用表单
@@ -108,5 +113,58 @@ class AddEquipController extends React.Component {
       }
     });
   };
+
+  // Antd的Upload组件上传前操作的钩子, 如返回false则不进行上传, 返回true进行上传
+  beforeUpload (file) {
+    // 判断条件
+    const permitionImgType = file.type === 'image/jpeg' || file.type === 'image/png';
+    const passSizeLimit = file.size / 1024 / 1024 < 2;
+
+    if (!permitionImgType) {
+      message.error('请上传格式为png或jpg的图片文件');
+    }
+    
+    if (!passSizeLimit) {
+      message.error('图片大小需小于2Mb');
+    }
+
+    return permitionImgType && passSizeLimit;
+  }
+
+  handleUploadcustomRequest = info => {
+    let { fileList } = this.state;
+
+    uploadProjectImageToQiniu(info.file)
+    .then(
+      res => {
+        message.success('上传成功');
+        console.log(res);
+        // 设置上传完的图片显示
+        info.file.status = 'done';
+        // 这里获取图片的连接!
+        info.file.url = 'http://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super';
+        fileList.push(info.file)
+        this.setState({
+          fileList
+        })
+      }
+    )
+    .catch(
+      err => {
+        message.error('上传失败');
+        message.error(err);
+      }
+    )
+  }
+
+  handleImageChange = info => {
+
+    // 删除图片时,图片列表进行更新
+    if (info.file.status === 'removed') {
+      this.setState({
+        fileList: info.fileList
+      })
+    }
+  }
 }
 export default Form.create({ name: 'AddEquipController' })(AddEquipController);
