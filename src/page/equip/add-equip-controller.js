@@ -105,7 +105,7 @@ class AddEquipController extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 在这里调用表单
-        launchRequest(APIS.EQUIP_INSERT, values)
+        launchRequest(APIS.EQUIP_SAVE, values)
         .then(data => {
           console.log(data);
         });
