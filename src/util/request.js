@@ -84,11 +84,14 @@ export function uploadProjectImageToQiniu(
   
     // 获取上传token
     let tokenResponse = await launchRequest(
-      APIs.GetUploadToken
+      APIs.GetUploadToken,
+      {
+        fileType: image.type
+      }
     );
-  
-    // formdata.append('key', tokenResponse.result.key);
-    formdata.append('token', tokenResponse);
+
+    formdata.append('key', tokenResponse.key);
+    formdata.append('token', tokenResponse.token);
     formdata.append('file', image);
   
     fetchParams = {
@@ -102,7 +105,7 @@ export function uploadProjectImageToQiniu(
       DominConfigs.REQUEST_TYPE.POST,
       fetchParams
     );
-  
+    
     if (responseData) {
       resolve(responseData);
     } else {

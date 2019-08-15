@@ -138,11 +138,10 @@ class AddEquipController extends React.Component {
     .then(
       res => {
         message.success('上传成功');
-        console.log(res);
         // 设置上传完的图片显示
         info.file.status = 'done';
         // 这里获取图片的连接!
-        info.file.url = 'http://www.baidu.com/img/superlogo_c4d7df0a003d3db9b65e9ef0fe6da1ec.png?where=super';
+        info.file.url = `${res.imageDomin}/${res.key}`;
         fileList.push(info.file)
         this.setState({
           fileList
