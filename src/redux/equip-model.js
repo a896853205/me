@@ -4,7 +4,6 @@ export const actions = {
   recordEquipList: createAction('recordEquipList')
 };
 
-
 export const equipReducer = handleActions({
   recordEquipList(state, { payload: result }) {
     

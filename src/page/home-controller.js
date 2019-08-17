@@ -1,7 +1,7 @@
 import React from 'react';
 // 路由
 import { Route, Link } from "react-router-dom";
-import { BCG_ROOT_Name, EQUIP } from '../constants/route-constants';
+import { BCG_ROOT_NAME, EQUIP } from '../constants/route-constants';
 // 样式
 import '../style/home.css'
 import { Layout, Menu, Icon } from 'antd';
@@ -13,6 +13,18 @@ class HomeController extends React.Component {
     isCollapse: true
   }
   render() {
+    let route = [],
+        menu = [];
+
+    // 遍历出导航栏和路由组件
+    for (let key in EQUIP.routes) {
+      let item = EQUIP.routes[key];
+      route.push(<Route key={`${item.path}`} path={`/${BCG_ROOT_NAME}/${item.path}`} component={item.component} />)
+      menu.push(<Menu.Item key={item.path}>
+        <Link to={`/${BCG_ROOT_NAME}/${item.path}`}>{item.name}</Link>
+      </Menu.Item>);
+    }
+
     return (
       <Layout>
         <Sider
@@ -43,11 +55,7 @@ class HomeController extends React.Component {
                   </span>
                 }
               >
-                {EQUIP.routes.map(item => 
-                  (<Menu.Item key={item.path}>
-                    <Link to={`/${BCG_ROOT_Name}/${item.path}`}>{item.name}</Link>
-                  </Menu.Item>)
-                )}
+                { menu }
             </Menu.SubMenu>
             <Menu.Item key="2">
               <Icon type="smile" />
@@ -64,9 +72,7 @@ class HomeController extends React.Component {
           <div className='main-container'>
             <Header style={{ background: '#fff', padding: 0 }} />
             <Content style={{ margin: '24px 16px 0', background: '#fff', padding: 20 }}>
-              {EQUIP.routes.map(item => 
-                (<Route key={`${item.path}`} path={`/${BCG_ROOT_Name}/${item.path}`} component={item.component} />)
-              )}
+              { route }
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
           </div>

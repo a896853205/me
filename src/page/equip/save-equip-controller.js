@@ -14,10 +14,11 @@ import {
   message
 } from 'antd';
 
-class AddEquipController extends React.Component {
+class SaveEquipController extends React.Component {
   state = {
     imgLoading: false,
   };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     // 表单布局
@@ -73,7 +74,7 @@ class AddEquipController extends React.Component {
             {getFieldDecorator('des')(<Input />)}
           </Form.Item>
           <Form.Item label="图片">
-            {getFieldDecorator('uploadImage', {
+            {getFieldDecorator('picUrl', {
               valuePropName: 'fileList',
               getValueFromEvent: this.handleImageChange,
             })(<Upload
@@ -100,19 +101,60 @@ class AddEquipController extends React.Component {
     );
   }
 
+  componentDidMount() {
+    if (this.props.location.state) {
+      // 装备修改
+      let equip = objectHelper.deepCopy(this.props.location.state),
+          uploadImageArr = equip.picUrl;
+
+      delete equip.id;
+      delete equip.uuid;
+      delete equip.picUrl;
+
+      // 修改图片显示
+      for (let i = 0; i < uploadImageArr.length; i++) {
+        uploadImageArr[i] = {
+          uid: uploadImageArr[i],
+          url: uploadImageArr[i],
+          status: 'done'
+        }
+      }
+      equip.picUrl = uploadImageArr;
+      
+      this.props.form.setFieldsValue({
+        ...equip
+      });
+    } else {
+      // 装备增加
+    }
+  }
+
   handleSubmit = e => {
     e.preventDefault();
 
     this.props.form.validateFields((err, values) => {
+
       if (!err) {
         let valuesCopy = objectHelper.deepCopy(values), // 深度复制参数, 直接操作values会影响显示
-            uploadImageArr = valuesCopy.uploadImage || [];
+            uploadImageArr = valuesCopy.picUrl || [];
 
         // 对图片的url替换掉整个文件
         for (let i = 0; i < uploadImageArr.length; i++) {
-          uploadImageArr[i] = uploadImageArr[i].originFileObj.url;
+          // 判断是否是修改
+          if (uploadImageArr[i].originFileObj) {
+            // 增加时抽取图片原来的url
+            uploadImageArr[i] = uploadImageArr[i].originFileObj.url;
+          } else {
+            // 修改时使用原来的url
+            uploadImageArr[i] = uploadImageArr[i].url;
+          }
         }
 
+        if (this.props.location.id) {
+          valuesCopy.id = this.props.location.id;
+          valuesCopy.uuid = this.props.location.uuid;
+        }
+        
         // 提交表单
         launchRequest(APIS.EQUIP_SAVE, valuesCopy)
         .then(data => {
@@ -167,4 +209,4 @@ class AddEquipController extends React.Component {
     return info.fileList;
   }
 }
-export default Form.create({ name: 'AddEquipController' })(AddEquipController);
+export default Form.create({ name: 'AddEquipController' })(SaveEquipController);

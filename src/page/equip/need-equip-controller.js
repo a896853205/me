@@ -1,4 +1,7 @@
 import React from 'react';
+// 路由
+import { BCG_ROOT_NAME, EQUIP } from '../../constants/route-constants';
+import { Link } from 'react-router-dom';
 // 请求文件
 import { launchRequest } from '../../util/request';
 import * as APIS from '../../constants/api-constants';
@@ -30,7 +33,13 @@ class NeedEquipController extends React.Component {
         width: '40%',
         render: (text, record) => (
           <span>
-            <span className='span-link span-blue'>修改</span>
+            <Link 
+              to={{
+                pathname: `/${BCG_ROOT_NAME}/${EQUIP.routes.SAVE.path}`,
+                state: record
+              }}
+              className='span-link span-blue'
+            >修改</Link>
             <Divider type="vertical" />
             <span className='span-link span-red' onClick={ () => { this.deleteConfirm(record)} }>删除</span>
             <Divider type='vertical'  />
