@@ -10,12 +10,13 @@ import {
   message
 } from 'antd';
 import '../../style/need-equip.css';
+// redux
+import { connect } from 'react-redux';
+import { actions as equipActions } from '../../redux/equip-model';
 
 const { confirm } = Modal;
 class NeedEquipController extends React.Component {
-  state = {
-    equipeList: []
-  }
+
   render() {
     const columns = [
       {
@@ -55,7 +56,7 @@ class NeedEquipController extends React.Component {
         需求装备订单
         <Table
           columns={ columns }
-          dataSource={ this.state.equipeList } 
+          dataSource={ this.props.equipList } 
           size="small"
           rowKey={ record => record.id } />
       </div>
@@ -68,7 +69,7 @@ class NeedEquipController extends React.Component {
     // 查询所有装备
     launchRequest(APIS.EQUIP_QUERY)
     .then(data => {
-      this.setState({equipeList: data});
+      this.props.recordEquipList(data);
     });
   }
   deleteConfirm (equip) {
@@ -98,4 +99,23 @@ class NeedEquipController extends React.Component {
     });
   }
 }
-export default NeedEquipController;
+
+const mapStateToProps = store => {
+  const equipStore = store['equipStore'],
+        { equipList } = equipStore;
+
+  return {
+    equipList
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+
+  return {
+    recordEquipList: params => {
+      dispatch(equipActions.recordEquipList(params));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NeedEquipController);
