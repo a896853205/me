@@ -150,9 +150,9 @@ class SaveEquipController extends React.Component {
           }
         }
 
-        if (this.props.location.id) {
-          valuesCopy.id = this.props.location.id;
-          valuesCopy.uuid = this.props.location.uuid;
+        if (this.props.location.state.id) {
+          valuesCopy.id = this.props.location.state.id;
+          valuesCopy.uuid = this.props.location.state.uuid;
         }
         
         // 提交表单
