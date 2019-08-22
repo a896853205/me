@@ -1,130 +1,16 @@
 import React from 'react';
-// 路由
-import { BCG_ROOT_NAME, EQUIP } from '../../constants/route-constants';
-import { Link } from 'react-router-dom';
-// 请求文件
-import { launchRequest } from '../../util/request';
-import * as APIS from '../../constants/api-constants';
-// UI
-import {
-  Table,
-  Divider,
-  Modal,
-  message
-} from 'antd';
-import '../../style/need-equip.css';
-// redux
-import { connect } from 'react-redux';
-import { actions as equipActions } from '../../redux/equip-model';
+// 自定义组件
+import EquipTable from './components/equip-table-controller';
 
-const { confirm } = Modal;
 class NeedEquipController extends React.Component {
-
   render() {
-    const columns = [
-      {
-        title: '名字',
-        dataIndex: 'name',
-        width: '60%',
-      },
-      {
-        title: '操作',
-        dataIndex: 'action',
-        width: '40%',
-        render: (text, record) => (
-          <span>
-            <Link 
-              to={{
-                pathname: `/${BCG_ROOT_NAME}/${EQUIP.routes.SAVE.path}`,
-                state: record
-              }}
-              className='span-link span-blue'
-            >修改</Link>
-            <Divider type="vertical" />
-            <span className='span-link span-red' onClick={ () => { this.deleteConfirm(record)} }>删除</span>
-            <Divider type='vertical'  />
-            <span className='span-link span-yellow'>拔草</span>
-          </span>
-        )
-      }
-      // {
-      //   title: '金币数',
-      //   dataIndex: 'money',
-      // },
-      // {
-      //   title: '备注',
-      //   dataIndex: 'des',
-      // },
-      // {
-      //   title: '省略图',
-      //   dataIndex: 'picUrl'
-      // },
-    ];
     return (
       <div className="equip">
         需求装备订单
-        <Table
-          columns={ columns }
-          dataSource={ this.props.equipList } 
-          size="small"
-          rowKey={ record => record.id } />
+        <EquipTable bImportance={true} />
       </div>
     );
   }
-  componentDidMount () {
-    this.selectAllEquip();
-  }
-  selectAllEquip () {
-    // 查询所有装备
-    launchRequest(APIS.EQUIP_QUERY)
-    .then(data => {
-      this.props.recordEquipList(data);
-    });
-  }
-  deleteConfirm (equip) {
-    // 适配onOk函数
-    let _this = this;
-    
-    confirm({
-      title: '你确定要删除哈?',
-      content: '你可想好了,一步错步步错!',
-      okText: '确认',
-      cancelText: '取消',
-      onOk () {
-        return new Promise((resolve, reject) => {
-          launchRequest(APIS.EQUIP_DELETE, {uuid: equip.uuid})
-          .then(() => {
-            _this.selectAllEquip();
-            message.success('删除成功了!');
-            resolve();
-          })
-          .catch(() => {
-            message.error('删除失败了!')
-            reject();
-          })
-        })
-      },
-      onCancel () {},
-    });
-  }
 }
 
-const mapStateToProps = store => {
-  const equipStore = store['equipStore'],
-        { equipList } = equipStore;
-
-  return {
-    equipList
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-
-  return {
-    recordEquipList: params => {
-      dispatch(equipActions.recordEquipList(params));
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(NeedEquipController);
+export default NeedEquipController;

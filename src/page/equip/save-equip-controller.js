@@ -11,8 +11,10 @@ import {
   Upload,
   Button,
   Icon,
-  message
+  message,
+  Radio
 } from 'antd';
+import '../../style/save-equip.css';
 
 class SaveEquipController extends React.Component {
   state = {
@@ -69,6 +71,21 @@ class SaveEquipController extends React.Component {
                 transform: value => parseFloat(value)
               }],
             })(<Input />)}
+          </Form.Item>
+          <Form.Item label="重要程度">
+            {getFieldDecorator('importance', {
+              rules: [{
+                required: true, 
+                message: '需要选择重要程度呦!' 
+              }]
+            })(
+              <Radio.Group buttonStyle='solid'>
+                <Radio.Button className='button-importance-0' value={0}>报废</Radio.Button>
+                <Radio.Button className='button-importance-1' value={1}>普通</Radio.Button>
+                <Radio.Button className='button-importance-2' value={2}>需要</Radio.Button>
+                <Radio.Button className='button-importance-3' value={3}>急需</Radio.Button>
+              </Radio.Group>,
+            )}
           </Form.Item>
           <Form.Item label="备注">
             {getFieldDecorator('des')(<Input />)}

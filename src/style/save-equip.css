@@ -1,6 +1,12 @@
-.upload-list-inline .ant-upload-animate-enter {
-  animation-name: uploadAnimateInlineIn;
+.button-importance-0 {
+  border-top: 2px solid rgb(166, 135, 207);
 }
-.upload-list-inline .ant-upload-animate-leave {
-  animation-name: uploadAnimateInlineOut;
+.button-importance-1 {
+  border-top: 2px solid rgb(178, 255, 253);
+}
+.button-importance-2 {
+  border-top: 2px solid rgb(255, 209, 124);
+}
+.button-importance-3 {
+  border-top: 2px solid rgb(255, 89, 160);
 }
