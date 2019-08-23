@@ -20,9 +20,11 @@ class HomeController extends React.Component {
     for (let key in EQUIP.routes) {
       let item = EQUIP.routes[key];
       route.push(<Route key={`${item.path}`} path={`/${BCG_ROOT_NAME}/${item.path}`} component={item.component} />)
-      menu.push(<Menu.Item key={item.path}>
-        <Link to={`/${BCG_ROOT_NAME}/${item.path}`}>{item.name}</Link>
-      </Menu.Item>);
+      if (item.menu) {
+        menu.push(<Menu.Item key={item.path}>
+          <Link to={`/${BCG_ROOT_NAME}/${item.path}`}>{item.name}</Link>
+        </Menu.Item>);
+      }
     }
 
     return (

@@ -1,4 +1,6 @@
 import React from 'react';
+// 路由
+import { BCG_ROOT_NAME, EQUIP } from '../../constants/route-constants';
 // 请求文件
 import { launchRequest, uploadProjectImageToQiniu } from '../../util/request';
 import * as APIS from '../../constants/api-constants';
@@ -18,10 +20,11 @@ import '../../style/save-equip.css';
 
 class SaveEquipController extends React.Component {
   state = {
-    imgLoading: false,
+    loading: false,
   };
 
   render() {
+    
     const { getFieldDecorator } = this.props.form;
     // 表单布局
     const formItemLayout = {
@@ -88,7 +91,10 @@ class SaveEquipController extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="备注">
-            {getFieldDecorator('des')(<Input />)}
+            {getFieldDecorator(
+              'des',
+              {initialValue: ''}
+              )(<Input />)}
           </Form.Item>
           <Form.Item label="图片">
             {getFieldDecorator('picUrl', {
@@ -109,7 +115,7 @@ class SaveEquipController extends React.Component {
               </Upload>)}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={this.state.loading}>
               种草!
             </Button>
           </Form.Item>
@@ -148,9 +154,12 @@ class SaveEquipController extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    
+    this.setState({
+      loading: true
+    });
 
     this.props.form.validateFields((err, values) => {
-
       if (!err) {
         let valuesCopy = objectHelper.deepCopy(values), // 深度复制参数, 直接操作values会影响显示
             uploadImageArr = valuesCopy.picUrl || [];
@@ -167,15 +176,19 @@ class SaveEquipController extends React.Component {
           }
         }
 
-        if (this.props.location.state.id) {
+        if (this.props.location.state && this.props.location.state.id) {
           valuesCopy.id = this.props.location.state.id;
           valuesCopy.uuid = this.props.location.state.uuid;
         }
         
         // 提交表单
         launchRequest(APIS.EQUIP_SAVE, valuesCopy)
-        .then(data => {
-          console.log(data);
+        .then(() => {
+          this.setState({
+            loading: false
+            },
+            () => {this.props.history.push(`/${BCG_ROOT_NAME}/${EQUIP.routes.SAVE_RESULT.path}`)}
+          );
         });
       }
     });
