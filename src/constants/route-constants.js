@@ -5,9 +5,6 @@ import OldEquipController from '../page/equip/old-equip-controller';
 
 export const BCG_ROOT_NAME = 'background';
 
-/**
- * 一级页
- */
 export const EQUIP = {
   routes: {
     LIST: { path: 'equip-list', name: '目前需求装备', component: NeedEquipController, menu: true }, // 装备需求

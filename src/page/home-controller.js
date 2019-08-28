@@ -5,8 +5,10 @@ import { BCG_ROOT_NAME, EQUIP } from '../constants/route-constants';
 // 样式
 import '../style/home.css'
 import { Layout, Menu, Icon } from 'antd';
-const { Header, Content, Footer, Sider } = Layout;
+// 自定义组件
+import CoverController from './components/cover-controller';
 
+const { Header, Content, Footer, Sider } = Layout;
 
 class HomeController extends React.Component {
   state = {
@@ -70,7 +72,9 @@ class HomeController extends React.Component {
           </Menu>
         </Sider>
         <Layout className="main-right-container">
-          <div className={this.state.isCollapse ? '' : 'un-collapsed'}></div>
+          <div className={this.state.isCollapse ? 'collapsed' : 'un-collapsed'}>
+            <CoverController />
+          </div>
           <div className='main-container'>
             <Header style={{ background: '#fff', padding: 0 }} />
             <Content style={{ margin: '24px 16px 0', background: '#fff', padding: 20 }}>

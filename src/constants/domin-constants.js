@@ -18,6 +18,7 @@ if (SAP_CONTROL === ENVIRONMENT.DEV) {
 // 模块
 export const PART = {
   OPT_EQUIP: '/equip',
+  OPT_USER: '/user',
   OPT_UPLOAD: '/upload',
 };
 

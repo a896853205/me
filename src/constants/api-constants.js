@@ -10,5 +10,10 @@ export const EQUIP_SAVE = `${DominConfigs.DOMAIN}${DominConfigs.PART.OPT_EQUIP}/
 export const EQUIP_DELETE = `${DominConfigs.DOMAIN}${DominConfigs.PART.OPT_EQUIP}/deleteEquip` // 删除一个装备
 export const EQUIP_BUY = `${DominConfigs.DOMAIN}${DominConfigs.PART.OPT_EQUIP}/buyEquip` // 购买一个装备
 
+/**
+ * optuser
+ ***************************/
+export const USER_LOGIN = `${DominConfigs.DOMAIN}${DominConfigs.PART.OPT_USER}/login`;  // 登录
+
 // 获取上传Token
 export const GetUploadToken = `${DominConfigs.DOMAIN}${DominConfigs.PART.OPT_UPLOAD}/getuploadtoken`;

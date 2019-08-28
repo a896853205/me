@@ -7,13 +7,21 @@
   position: relative;
   z-index: 0;
 }
+.collapsed {
+  display: none;
+}
 .un-collapsed {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
   z-index: 1;
-  transition: .2s;
+  animation: un-collapsed-start .2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes un-collapsed-start {
+  from { background: rgba(0, 0, 0, 0) }
+  to { background: rgba(0, 0, 0, 0.6) }
 }
 .main-right-container {
   position: relative;
